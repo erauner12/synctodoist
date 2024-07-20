@@ -8,6 +8,7 @@ from typing import Iterable, Any, TYPE_CHECKING, TypeVar, Generic, Type
 from synctodoist.exceptions import TodoistError
 from synctodoist.managers import command_manager
 from synctodoist.models import TodoistBaseModel, Settings
+import uuid
 
 if TYPE_CHECKING:
     pass
@@ -175,17 +176,14 @@ class BaseManager(Generic[TBaseModel]):
 
         command_manager.add_command(data={'id': item_id}, command_type=self.model.TodoistConfig.command_delete)
 
-    def update(self, item: int | str | TBaseModel, updated_item: TBaseModel):
-        """
-        Update the item identified by item_id with the data from item
-
-        Args:
-            item: the item_id of the item to update
-            updated_item: the data to use for the update
-        """
+    def update(self, item: int | str | Task, updated_item: Task):
         params, item_id = self._extract_params(item)
-
-        command_manager.add_command(data={'id': item_id, **updated_item.dict(exclude={'id'}, exclude_none=True, exclude_defaults=True)},
-                                    command_type=self.model.TodoistConfig.command_update, **params)  # type: ignore
-
+        temp_id = str(uuid.uuid4())
+        command_manager.add_command(
+            data={'id': item_id, 'temp_id': temp_id, **updated_item.dict(exclude={'id'}, exclude_none=True, exclude_defaults=True)},
+            command_type=self.model.TodoistConfig.command_update,
+            item=updated_item,
+            **params
+        )
+        command_manager.temp_items[temp_id] = updated_item
     # endregion

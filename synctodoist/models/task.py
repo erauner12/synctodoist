@@ -5,6 +5,8 @@ from typing_extensions import Annotated
 
 from .due import Due
 from .todoist_base_model import TodoistBaseModel
+from .duration import Duration
+
 
 
 class Task(TodoistBaseModel):
@@ -28,6 +30,7 @@ class Task(TodoistBaseModel):
     sync_id: str | int | None = None
     added_at: datetime | None = None
     auto_reminder: bool = False
+    duration: Duration | None = None
     model_config = ConfigDict()
 
     class TodoistConfig:

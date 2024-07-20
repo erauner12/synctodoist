@@ -8,3 +8,4 @@ from .section import Section
 from .settings import Settings
 from .task import Task
 from .todoist_base_model import TodoistBaseModel
+from .duration import Duration

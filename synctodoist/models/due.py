@@ -1,13 +1,11 @@
 from datetime import datetime, date
-from typing import Annotated
+from typing import Optional
 
 from pydantic import BaseModel, Field
 
-
 class Due(BaseModel):
-    """Due model"""
-    date: Annotated[date | datetime | None, Field(default=None)]
+    date: Optional[date | datetime] = None
     is_recurring: bool = False
-    lang: str | None = None
-    string: str | None = None
-    timezone: str | None = None
+    lang: Optional[str] = None
+    string: Optional[str] = None
+    timezone: Optional[str] = None
